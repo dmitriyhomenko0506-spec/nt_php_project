@@ -333,3 +333,78 @@ color: #b39802;
   max-width: 100%; 
 }
 }
+
+/* Style for block/footer.html */
+
+#footer{
+  background-image: url(/img/footer-bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
+  height: 30em;
+  margin-top: 30px;
+  border-top: 1px solid #e3e2e2;
+}
+.footer-title {
+  margin-top: 15em;
+  font-size: 15px;
+  color: white;
+  font-weight: bold;
+}
+.footer-description{
+  font-size: 13px;
+  color:white;
+  font-weight: normal;
+  margin-top: 15px;
+}
+.footer-copyright{
+  font-size: 13px;
+  color:white;
+  font-weight: normal;
+  margin-top: 15px;
+}
+.footer-copyright a{
+color:#b39802;
+}
+.email{
+  max-width: 85%;
+  margin-top: 15px;
+}
+.btn-color{
+  background-color: #b39802; 
+  border: 1px solid #e3e2e2;
+  margin-top: 6px;
+}
+.btn-color:hover{
+  background-color: grey; 
+  border: 1px solid #e3e2e2;
+}
+.footer-social{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.footer-social img{
+  max-height: 20px;
+}
+.footer-social span{
+  margin-right: 5px;
+}
+.footer-block{
+  margin-left: 8em;
+}
+@media screen and (max-width: 1200px) {
+#footer{
+  height: 100%;
+}
+.footer-title {
+  margin-top: 1em;
+}
+.footer-block{
+  margin-top: 6em;
+  margin-left: 0em;
+}
+.footer-block-style {
+  margin-top: 5px;
+  border-top: 1px dashed #e3e2e2;
+}
+}
