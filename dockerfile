@@ -7,3 +7,4 @@ COPY ./my-httpd.conf /etc/apache2/conf-available/no-cache.conf
 
 # Активируем его docker-compose up -d --build
 RUN a2enconf no-cache
+COPY . /var/www/html/
