@@ -1,0 +1,12 @@
+
+services:
+  php-app:
+    # Используем официальный образ PHP с Apache
+    build: .
+    restart: always
+    container_name: php
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./my-httpd.conf:/etc/apache2/conf-available/no-cache.conf
