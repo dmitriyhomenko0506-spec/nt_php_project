@@ -4,9 +4,9 @@ services:
     # Используем официальный образ PHP с Apache
     build: .
     restart: always
-    container_name: php
+    container_name: php-func
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - .:/var/www/html
       - ./my-httpd.conf:/etc/apache2/conf-available/no-cache.conf
