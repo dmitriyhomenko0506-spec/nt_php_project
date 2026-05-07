@@ -3,16 +3,18 @@
 // Функция checkEven
 function checkEven (int $number){
     if ($number % 2 === 0){
-        $result = "Парне";} else {
-            $result = 'Непарне';
+        $result = 1;} else {
+            $result = 0;
         }
    return $result; 
 }
 
 //Функция gradeLetter
 function gradeLetter (int $number){
-    
-    if ($number <= 100 and $number >= 90){
+
+    if ($number > 100 ){
+        $result = "A";
+    } elseif ($number <= 100 and $number >= 90){
         $result = "A";
     } elseif ($number <= 89 and $number >= 80) {
         $result = "B";
@@ -24,7 +26,7 @@ function gradeLetter (int $number){
         $result = "F";
     }
 
-    return $result;
+    return $result; 
 }
 
 // Функция passwordStrength

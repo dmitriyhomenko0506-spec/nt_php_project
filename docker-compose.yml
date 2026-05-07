@@ -1,6 +1,6 @@
 
 services:
-  php-app:
+  php-nt:
     # Используем официальный образ PHP с Apache
     build: .
     restart: always
@@ -9,4 +9,3 @@ services:
       - "8081:80"
     volumes:
       - .:/var/www/html
-      - ./my-httpd.conf:/etc/apache2/conf-available/no-cache.conf
