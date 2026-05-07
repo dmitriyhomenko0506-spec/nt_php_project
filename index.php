@@ -17,7 +17,7 @@ print_r ($numberResult); //Выводим результат проверки н
 
 
 // Функция passwordStrength
-$password = "abcdefghi"; // Пишим пароль 
+$password = trim("abcdefghi"); // Пишим пароль 
 $passwordResult = passwordStrength($password);
 //print_r ($passwordResult); //Выводим результат проверки на экран.
 
