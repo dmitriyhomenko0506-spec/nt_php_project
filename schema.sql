@@ -20,6 +20,7 @@ CREATE TABLE if not exists courses (
 /* lessons - Формируем список уроков */
 CREATE TABLE if not exists lessons (
     id int UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
     course_id SMALLINT UNSIGNED NOT NULL,
     video_url VARCHAR(255) NOT NULL,
 
