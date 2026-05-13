@@ -41,6 +41,8 @@ CREATE TABLE if not exists enrolments (
     course_id SMALLINT UNSIGNED NOT NULL,
     progress_pct TINYINT UNSIGNED,
 
+    
+    UNIQUE (user_id , course_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
