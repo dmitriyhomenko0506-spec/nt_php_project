@@ -1,6 +1,7 @@
 <?php
 
-class RGB {
+class RGB 
+{
 
     public int $red;
     public int $green;
@@ -13,7 +14,7 @@ class RGB {
       $this->blue = $blue;
     }
 
-    public static function Rand ()
+    public static function Rand (): self
     {
        $red = random_int(0, 255);
        $green = random_int(0, 255);
@@ -34,8 +35,8 @@ $colorRand = $color->Rand();
 var_dump($colorRand);
 */
 
-class ValueObject {
-
+class ValueObject 
+{
 
      //Значение = свойства
      private int $red;   
@@ -49,46 +50,45 @@ class ValueObject {
          $this->setBlue($blue);
      }
 
-     /// get  ---- отдаем значение (set)
-
-      public function getRed(){
+    // get  ---- отдаем значение (set)
+    public function getRed(): int
+     {
         return $this->red;
      }
     
-      public function getGreen(){
+    public function getGreen(): int
+      {
        return $this->green;
-     }
-
-      public function getBlue(){
-         return $this->blue;
-     }
-
-   
-     ///set 
-     
-    public function setRed($red){
-      if ($red < 0  OR $red > 255 ) {
-        throw new Exception ("Error red");
-      } else {
-        $this->red = $red;
       }
+
+    public function getBlue(): int
+      {
+         return $this->blue;
+      }
+
+
+   //validate(int $color)
+    private function validate(int $color): bool
+    {
+       return $color >= 0 AND $color <= 255;
     }
 
-    public function setGreen($green){
-      if ($green < 0  OR $green > 255 ) {
-        throw new Exception ("Error green");
-      } else {
-        $this->green = $green;
-      }
-   }
+   
+    //set 
+    public function setRed(int $red): void 
+    {
+       $this->validate($red) ? $this->red = $red : throw new Exception("Error red");
+    }
 
-    public function setBlue($blue){
-      if ($blue < 0  OR $blue > 255 ) {
-        throw new Exception ("Error blue");
-      } else {
-        $this->blue = $blue;
-      }
-   }
+    public function setGreen(int $green): void
+    {
+       $this->validate($green) ? $this->green = $green : throw new Exception("Error green");
+    }
+
+    public function setBlue(int $blue): void
+    {
+       $this->validate($blue) ? $this->blue = $blue : throw new Exception("Error blue");
+    }
     
 
    /*
@@ -102,25 +102,19 @@ class ValueObject {
   */
 
 
-   public function comparison (self $OtherObject )
+   public function comparison (self $OtherObject): bool
    {
-       if (
-            $this->red == $OtherObject->getRed() AND
-            $this->green == $OtherObject->getGreen() AND
-            $this->blue == $OtherObject->getBlue() 
-         ) 
-         { 
-          return true; } else {
-          return false;
-         }
+       return  $this->red == $OtherObject->getRed() AND
+               $this->green == $OtherObject->getGreen() AND
+               $this->blue == $OtherObject->getBlue();
    }
 
-   public function mix (self $OtherColor)
+   public function mix (self $OtherColor): self
    {
-     
-     $mixRed = (int) ($this->red + $OtherColor->getRed() ) / 2;
-     $mixGreen = (int) ($this->green + $OtherColor-> getGreen()) / 2;
-     $mixBlue = (int) ($this->blue + $OtherColor-> getBlue()) / 2;
+
+     $mixRed = (int) (($this->red + $OtherColor->getRed() ) / 2);
+     $mixGreen = (int) (($this->green + $OtherColor-> getGreen()) / 2);
+     $mixBlue = (int) (($this->blue + $OtherColor-> getBlue()) / 2);
 
      return new self ($mixRed, $mixGreen, $mixBlue);
    }
