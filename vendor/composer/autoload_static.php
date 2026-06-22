@@ -10,6 +10,7 @@ class ComposerStaticInit59e045dfa2669d69e9f918ed82bd1509
         'A' => 
         array (
             'App\\Route\\' => 10,
+            'App\\Middleware\\' => 15,
             'App\\Controller\\' => 15,
         ),
     );
@@ -18,6 +19,10 @@ class ComposerStaticInit59e045dfa2669d69e9f918ed82bd1509
         'App\\Route\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Route',
+        ),
+        'App\\Middleware\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Middleware',
         ),
         'App\\Controller\\' => 
         array (

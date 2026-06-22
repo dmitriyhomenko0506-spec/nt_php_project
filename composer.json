@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "App\\Controller\\": "Controller/",
-            "App\\Route\\": "Route/"
+            "App\\Route\\": "Route/",
+            "App\\Middleware\\": "Middleware/"
         }
     },
     "authors": [

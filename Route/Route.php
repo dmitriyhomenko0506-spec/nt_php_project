@@ -5,7 +5,7 @@ class Route
 {
     private static array $routes = [];
 
-    public static function get(string $url, array $action): void
+    public static function get(string $url, array $action, ?string $middleware = null): void
     {
         $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
         $pattern = '#^' . $pattern . '$#';
@@ -13,11 +13,12 @@ class Route
         self::$routes[] = [
             'pattern' => $pattern,
             'action' => $action,
-            'method' => 'GET'
+            'method' => 'GET',
+            'middleware' => $middleware
         ];
     }
 
-    public static function post(string $url, array $action): void
+    public static function post(string $url, array $action, ?string $middleware = null): void
     {
         $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
         $pattern = '#^' . $pattern . '$#';
@@ -25,7 +26,8 @@ class Route
         self::$routes[] = [
             'pattern' => $pattern,
             'action' => $action,
-            'method' => 'POST'
+            'method' => 'POST',
+            'middleware' => $middleware
         ];
     }
 
@@ -49,8 +51,17 @@ class Route
             // и только если метод совпал — проверяем регулярное выражение URL
             if ($route['method'] === $requestMethod && preg_match($route['pattern'], $current_url, $matches)) {
 
+
                 array_shift($matches);
                 $params = $matches;
+
+                if (!empty($route['middleware'])) {
+                    $middlewareClass = $route['middleware'];
+                    /** @var mixed $middlewareObject */
+                    $middlewareObject = new $middlewareClass();
+                    call_user_func_array([$middlewareObject, 'handle'], $params); // Теперь тут будет лежать ваш ID!
+                }
+
 
                 [$controllerClass, $methodName] = $route['action'];
                 $controllerObject = new $controllerClass();
