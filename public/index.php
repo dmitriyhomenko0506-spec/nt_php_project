@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 // Говорим PHP, какие именно классы мы будем использовать ниже
 use App\Route\Route;
+//use App\Route\RouteApi;
 use App\Middleware\UserIdMiddleware;
 use App\Controller\IndexController;
 use App\Controller\AboutController;
