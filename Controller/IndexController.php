@@ -5,10 +5,10 @@ namespace App\Controller;
 
 class IndexController
 {
-    // Этот метод будет вызываться, когда пользователь зайдет на /clinic/
     public function onePage(): void
     {
-        echo "<h1>Главная страница</h1>";
-        echo "<p>Добро пожаловать! Эта страница должна нас перенаправлять на шаблон главная</p>";
+        // Подключаем файл шаблона. Поднимаемся на уровень выше из папки Controller и заходим в Views
+        require_once __DIR__ . '/../Views/index.tpl.php';
     }
+
 }
