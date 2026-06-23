@@ -9,6 +9,7 @@ class ComposerStaticInit59e045dfa2669d69e9f918ed82bd1509
     public static $prefixLengthsPsr4 = array (
         'A' => 
         array (
+            'App\\Views\\' => 10,
             'App\\Route\\' => 10,
             'App\\Middleware\\' => 15,
             'App\\Controller\\' => 15,
@@ -16,6 +17,10 @@ class ComposerStaticInit59e045dfa2669d69e9f918ed82bd1509
     );
 
     public static $prefixDirsPsr4 = array (
+        'App\\Views\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Views',
+        ),
         'App\\Route\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Route',

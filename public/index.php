@@ -10,8 +10,7 @@ use App\Controller\AboutController;
 use App\Controller\UserController;
 use App\Controller\ContactController;
 
-// Регистрируем страницу "О нас" через контроллер
-// Выражение AboutController::class просто возвращает строку 'AboutController'
+// WEB
 Route::get('/clinic/', [IndexController::class, 'onePage']);
 Route::get('/clinic/about', [AboutController::class, 'aboutPage']);
 Route::get('/clinic/user', [UserController::class, 'all']);

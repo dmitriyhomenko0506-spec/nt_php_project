@@ -34,7 +34,7 @@ class Route
     public static function dispatch(): void
     {
 
-        // var_dump(self::$routes);
+        //var_dump(self::$routes);
 
 
         // 1. Узнаем метод запроса из браузера (GET, POST, PUT и т.д.)
@@ -46,6 +46,7 @@ class Route
 
         // Перебираем все наши маршруты из блокнота
         foreach (self::$routes as $route) {
+
 
             // ИСПРАВЛЕНО: Сначала проверяем, совпадает ли метод (GET/POST), 
             // и только если метод совпал — проверяем регулярное выражение URL
@@ -59,7 +60,7 @@ class Route
                     $middlewareClass = $route['middleware'];
                     /** @var mixed $middlewareObject */
                     $middlewareObject = new $middlewareClass();
-                    call_user_func_array([$middlewareObject, 'handle'], $params); // Теперь тут будет лежать ваш ID!
+                    call_user_func_array([$middlewareObject, 'handle'], $params); // Теперь тут будет лежать ID!
                 }
 
 

@@ -5,7 +5,7 @@ namespace App\Controller;
 
 class ContactController
 {
-    // Этот метод будет вызываться, когда пользователь зайдет на /about
+    // Этот метод будет вызываться, когда пользователь зайдет на /conctact
 
     public function contactPage()
     {
