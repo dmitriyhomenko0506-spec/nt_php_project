@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /clinic/
+
+# Если запрос еще не указывает на папку public, перенаправляем туда
+RewriteCond %{REQUEST_URI} !^/clinic/public/
+RewriteRule ^(.*)$ public/$1 [L]
