@@ -1,14 +1,20 @@
 <?php
 
 namespace App\Route;
+
+use App\Traits\RoutePattern;
+
+
 class Route
 {
+
+    use RoutePattern;
+
     private static array $routes = [];
 
     public static function get(string $url, array $action, ?string $middleware = null): void
     {
-        $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
-        $pattern = '#^' . $pattern . '$#';
+        $pattern = self::get_route_pattern($url);
 
         //Проверка на API вход
         if (str_contains($url, '/api/')) {
@@ -28,8 +34,7 @@ class Route
 
     public static function post(string $url, array $action, ?string $middleware = null): void
     {
-        $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
-        $pattern = '#^' . $pattern . '$#';
+        $pattern = self::get_route_pattern($url);
 
         //Проверка на API вход
         if (str_contains($url, '/api/')) {
@@ -49,8 +54,7 @@ class Route
 
     public static function put(string $url, array $action, ?string $middleware = null): void
     {
-        $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
-        $pattern = '#^' . $pattern . '$#';
+        $pattern = self::get_route_pattern($url);
 
         self::$routes[] = [
             'type' => 'API',
