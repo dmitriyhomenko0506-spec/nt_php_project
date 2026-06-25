@@ -9,8 +9,8 @@ use App\Commands\MigrationMakeCommand;
 $application = new Application();
 
 // Просто регистрируем наши классы команд
-$application->add(new RouteListCommand());
-$application->add(new MigrationMakeCommand());
+$application->addCommand(new RouteListCommand());
+$application->addCommand(new MigrationMakeCommand());
 
 // Symfony сама прочитает $argv и запустит нужный роут
 $application->run();

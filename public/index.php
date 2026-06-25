@@ -9,7 +9,7 @@ try {
     // Подключаем Router для WEB
     require_once __DIR__ . '/../Route/web/RouteListWeb.php';
     // Подключаем Router для API
-    //require_once __DIR__ . '/../Route/web/RouteListApi.php';
+    //require_once __DIR__ . '/../Route/api/RouteListApi.php';
 
 
 } catch (\Throwable $th) {
