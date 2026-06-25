@@ -10,10 +10,18 @@ class Route
         $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
         $pattern = '#^' . $pattern . '$#';
 
+        //Проверка на API вход
+        if (str_contains($url, '/api/')) {
+            $type = 'API';
+        } else {
+            $type = 'WEB';
+        }
+
         self::$routes[] = [
-            'pattern' => $pattern,
-            'action' => $action,
+            'type' => $type,
             'method' => 'GET',
+            'uri' => $pattern,
+            'action' => $action,
             'middleware' => $middleware
         ];
     }
@@ -23,18 +31,51 @@ class Route
         $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
         $pattern = '#^' . $pattern . '$#';
 
+        //Проверка на API вход
+        if (str_contains($url, '/api/')) {
+            $type = 'API';
+        } else {
+            $type = 'WEB';
+        }
+
         self::$routes[] = [
-            'pattern' => $pattern,
-            'action' => $action,
+            'type' => $type,
             'method' => 'POST',
+            'uri' => $pattern,
+            'action' => $action,
             'middleware' => $middleware
         ];
     }
 
+    public static function put(string $url, array $action, ?string $middleware = null): void
+    {
+        $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_]+)', $url);
+        $pattern = '#^' . $pattern . '$#';
+
+        self::$routes[] = [
+            'type' => 'API',
+            'method' => 'PUT',
+            'uri' => $pattern,
+            'action' => $action,
+            'middleware' => $middleware
+        ];
+    }
+
+    public static function getRoutes(): array
+    {
+        return self::$routes;
+    }
+
+
     public static function dispatch(): void
     {
 
-        //var_dump(self::$routes);
+        // var_dump(self::$routes);
+
+        //Проверка на запуск из консоли
+        if (php_sapi_name() === 'cli') {
+            return;
+        }
 
 
         // 1. Узнаем метод запроса из браузера (GET, POST, PUT и т.д.)
@@ -50,7 +91,7 @@ class Route
 
             // ИСПРАВЛЕНО: Сначала проверяем, совпадает ли метод (GET/POST), 
             // и только если метод совпал — проверяем регулярное выражение URL
-            if ($route['method'] === $requestMethod && preg_match($route['pattern'], $current_url, $matches)) {
+            if ($route['method'] === $requestMethod && preg_match($route['uri'], $current_url, $matches)) {
 
 
                 array_shift($matches);

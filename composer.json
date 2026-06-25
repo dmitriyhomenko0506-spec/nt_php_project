@@ -5,14 +5,17 @@
             "App\\Controller\\": "Controller/",
             "App\\Route\\": "Route/",
             "App\\Middleware\\": "Middleware/",
-            "App\\Views\\": "Views/"
+            "App\\Views\\": "Views/",
+            "App\\": "src/"
+        },
+        "authors": [
+            {
+                "name": "Dmitriy Homenko",
+                "email": "dmitriyhomenko0506@gmail.com"
+            }
+        ],
+        "require": {
+            "symfony/console": "^7.4"
         }
-    },
-    "authors": [
-        {
-            "name": "Dmitriy Homenko",
-            "email": "dmitriyhomenko0506@gmail.com"
-        }
-    ],
-    "require": {}
+    }
 }
