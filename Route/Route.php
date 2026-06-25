@@ -3,12 +3,13 @@
 namespace App\Route;
 
 use App\Traits\RoutePattern;
+use App\Traits\RouteApiWeb;
 
 
 class Route
 {
 
-    use RoutePattern;
+    use RoutePattern, RouteApiWeb;
 
     private static array $routes = [];
 
@@ -17,11 +18,7 @@ class Route
         $pattern = self::get_route_pattern($url);
 
         //Проверка на API вход
-        if (str_contains($url, '/api/')) {
-            $type = 'API';
-        } else {
-            $type = 'WEB';
-        }
+        $type = self::get_route_type($url);
 
         self::$routes[] = [
             'type' => $type,
@@ -37,11 +34,7 @@ class Route
         $pattern = self::get_route_pattern($url);
 
         //Проверка на API вход
-        if (str_contains($url, '/api/')) {
-            $type = 'API';
-        } else {
-            $type = 'WEB';
-        }
+        $type = self::get_route_type($url);
 
         self::$routes[] = [
             'type' => $type,
@@ -56,8 +49,11 @@ class Route
     {
         $pattern = self::get_route_pattern($url);
 
+        //Проверка на API вход
+        $type = self::get_route_type($url);
+
         self::$routes[] = [
-            'type' => 'API',
+            'type' => $type,
             'method' => 'PUT',
             'uri' => $pattern,
             'action' => $action,
