@@ -58,7 +58,8 @@ class RouteListCommand extends Command
         $tableRows = [];
         foreach ($registeredRoutes as $route) {
 
-
+            $route['uri'] = str_replace("#^", "", $route['uri']);
+            $route['uri'] = str_replace('$#', '', $route['uri']);
 
             // Форматируем Action (Контроллер - Метод)
             $action = is_array($route['action'])
