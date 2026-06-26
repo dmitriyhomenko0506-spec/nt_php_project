@@ -49,11 +49,9 @@ class Route
     {
         $pattern = self::get_route_pattern($url);
 
-        //Проверка на API вход
-        $type = self::get_route_type($url);
 
         self::$routes[] = [
-            'type' => $type,
+            'type' => 'API',
             'method' => 'PUT',
             'uri' => $pattern,
             'action' => $action,
