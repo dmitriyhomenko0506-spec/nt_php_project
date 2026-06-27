@@ -47,7 +47,7 @@ class MigrationMakeCommand extends Command
 
 //Migration: {$migrationName}
 
-class {$migrationName} {
+return new class { 
     public function up(): void
     {
         // Логика создания / изменения таблицы
@@ -57,7 +57,7 @@ class {$migrationName} {
     {
         // Логика отката изменений
     }
-}
+};
 PHP;
 
         // 5. Записываем файл 

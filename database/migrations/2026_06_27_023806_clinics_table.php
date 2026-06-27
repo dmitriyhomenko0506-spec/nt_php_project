@@ -2,8 +2,7 @@
 
 //Migration: clinics_table
 
-class clinics_table
-{
+return new class {
     public function up(): void
     {
         // Логика создания / изменения таблицы
@@ -13,4 +12,4 @@ class clinics_table
     {
         // Логика отката изменений
     }
-}
+};
