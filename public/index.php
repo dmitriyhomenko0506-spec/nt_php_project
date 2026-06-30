@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
+define('BASE_DIR', dirname(__DIR__));
+require_once BASE_DIR . '/vendor/autoload.php';
 
 
 try {
 
     // Подключаем Router для WEB
-    require_once __DIR__ . '/../Route/web/RouteListWeb.php';
+    require_once BASE_DIR . '/Route/web/RouteListWeb.php';
     // Подключаем Router для API
-    //require_once __DIR__ . '/../Route/api/RouteListApi.php';
+    //require_once BASE_DIR . '/Route/api/RouteListApi.php';
 
 
 } catch (\Throwable $th) {
@@ -17,6 +17,8 @@ try {
     throw $th;
 
 }
+
+
 
 
 

@@ -7,8 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
-
 class MigrationMakeCommand extends Command
 {
     protected function configure(): void
@@ -28,7 +26,7 @@ class MigrationMakeCommand extends Command
         $migrationName = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $migrationName));
 
         // 2. Определяем путь к папке с миграциями
-        $migrationsDir = __DIR__ . '/../../database/migrations';
+        $migrationsDir = BASE_DIR . '/database/migrations';
 
         // Если папки database/migrations еще нет, создаем её автоматически
         if (!is_dir($migrationsDir)) {
@@ -48,14 +46,14 @@ class MigrationMakeCommand extends Command
 //Migration: {$migrationName}
 
 return new class { 
-    public function up(): void
+    public function up(): string
     {
-        // Логика создания / изменения таблицы
+        return '';
     }
 
-    public function down(): void
+    public function down(): string
     {
-        // Логика отката изменений
+        return '';
     }
 };
 PHP;

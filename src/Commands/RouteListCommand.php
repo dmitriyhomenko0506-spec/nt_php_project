@@ -20,17 +20,17 @@ class RouteListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         //Подключаем файл с роутами Web
-        $routesFileWeb = __DIR__ . '/../../Route/web/RouteListWeb.php';
+        $routesFileWeb = BASE_DIR . '/Route/web/RouteListWeb.php';
 
 
         //Если файла нет ошибка
         if (!file_exists($routesFileWeb)) {
-            $output->writeln('<error>Файл RouteListWeb.php не найден!</error>');
+            $output->writeln('<error>Файл RouteListWep.php  не найден!</error>');
             return Command::FAILURE;
         }
 
         //Подключаем файл с роутами API
-        $routesFileApi = __DIR__ . '/../../Route/api/RouteListApi.php';
+        $routesFileApi = BASE_DIR . '/Route/api/RouteListApi.php';
 
 
         //Если файла нет ошибка
@@ -87,6 +87,4 @@ class RouteListCommand extends Command
 
         return Command::SUCCESS;
     }
-
-
 }
