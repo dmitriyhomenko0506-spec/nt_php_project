@@ -16,6 +16,6 @@ return new class {
 
     public function down(): string
     {
-        return 'DROP TABLE vets';
+        return 'DROP TABLE IF EXISTS vets';
     }
 };

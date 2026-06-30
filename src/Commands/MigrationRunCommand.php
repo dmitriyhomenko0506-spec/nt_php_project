@@ -40,6 +40,11 @@ class MigrationRunCommand extends Command
         $newMigrations = array_diff($arrayDirMigration, $arrayMigrationDb);
         sort($newMigrations);
 
+        if (empty($newMigrations)) {
+            $output->writeln('<info> --> Нет новых миграций</info>');
+            die;
+        }
+
         $db = DB::connect();
         $quary = $db->prepare("INSERT INTO migration (migration, batch) VALUES (:name, :batch)");
 
