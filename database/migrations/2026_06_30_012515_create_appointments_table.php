@@ -12,6 +12,8 @@ return new class {
                 pet_id int UNSIGNED NOT NULL,
                 scheduled_for DATETIME NOT NULL,
                 status VARCHAR(20),
+                
+                UNIQUE KEY unique_appointment (vet_id, scheduled_for),
 
                 FOREIGN KEY (clinic_id) REFERENCES clinics(id),
                 FOREIGN KEY (vet_id) REFERENCES vets(id),

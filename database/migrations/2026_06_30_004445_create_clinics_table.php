@@ -7,7 +7,7 @@ return new class {
     {
         return 'CREATE TABLE if not exists clinics (
                 id smallint UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-                name VARCHAR(50) NOT NULL,
+                name VARCHAR(50) UNIQUE NOT NULL,
                 city VARCHAR(50) NOT NULL
                 );';
     }

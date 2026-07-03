@@ -7,7 +7,7 @@ return new class {
     {
         return 'CREATE TABLE if not exists pet_owners (
                 id int UNSIGNED PRIMARY KEY AUTO_INCREMENT, 
-                name VARCHAR(50) NOT NULL,
+                name VARCHAR(50) UNIQUE NOT NULL,
                 phone VARCHAR(20) UNIQUE NOT NULL
                 );';
     }
