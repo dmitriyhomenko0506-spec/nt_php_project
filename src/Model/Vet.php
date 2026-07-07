@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use App\Class\Model;
+use App\Model\Base\Model;
 
 class Vet extends Model
 {

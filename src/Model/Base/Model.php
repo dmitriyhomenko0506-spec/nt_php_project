@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Class;
+namespace App\Model\Base;
 
 use App\Class\DB;
 use PDO;
@@ -72,7 +72,7 @@ abstract class Model
         // Склеиваем итоговую SQL-строку
         $fullSql = "SELECT {$cols} FROM {$this->table}{$sqlwhere};";
 
-        // Подключаем БД через твой синглтон DB
+        // Подключаем БД
         $stmt = DB::connect()->prepare($fullSql);
         $stmt->execute();
 
