@@ -84,6 +84,5 @@ class MigrationRollbackCommand extends Command
         $db = DB::connect();
         $LastMigrationDb = $db->query("SELECT migration FROM migration Where batch = $lastBarch")->fetchAll(\PDO::FETCH_COLUMN);
         return $LastMigrationDb;
-
     }
 }

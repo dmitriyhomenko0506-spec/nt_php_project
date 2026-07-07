@@ -91,7 +91,6 @@ class MigrationRunCommand extends Command
         if (!$result) {
             throw new RuntimeException('Error create table migration');
         }
-
     }
 
     private function GetScanDirMigration()
@@ -114,7 +113,5 @@ class MigrationRunCommand extends Command
         $db = DB::connect();
         $MigrationDb = $db->query("SELECT migration FROM migration")->fetchAll(\PDO::FETCH_COLUMN);
         return $MigrationDb;
-
     }
-
 }

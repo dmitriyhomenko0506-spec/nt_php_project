@@ -38,9 +38,7 @@ class SeederRunCommand extends Command
                     $db->prepare($seeder->run())->execute();
                     $output->writeln("<info> ---> Успешно выполнен: -->  " . $seeders . '. </info>');
                 }
-
             }
-
         }
 
         //dd($scanDir);
