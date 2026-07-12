@@ -23,8 +23,8 @@ Route::get('/clinic/contact', [ContactController::class, 'contactPage']);
 Route::get('/clinic/login', [AuthController::class, 'index']);
 Route::post('/clinic/login', [AuthController::class, 'submit'], AuthMiddleware::class);
 Route::get('/clinic/logout', [AuthController::class, 'logout']);
-Route::get('/clinic/admin', [AdminController::class, 'admin'], CheckAuthMiddleware::class);
-Route::get('/clinic/vet-clinic', [VetClinicController::class, 'vetClinic'], CheckAuthMiddleware::class);
-Route::get('/clinic/vet', [VetController::class, 'vet'], CheckAuthMiddleware::class);
+Route::get('/clinic/admin/admin', [AdminController::class, 'admin'], CheckAuthMiddleware::class);
+Route::get('/clinic/admin/vet-clinic', [VetClinicController::class, 'vetClinic'], CheckAuthMiddleware::class);
+Route::get('/clinic/admin/vet', [VetController::class, 'vet'], CheckAuthMiddleware::class);
 
 Route::dispatch();

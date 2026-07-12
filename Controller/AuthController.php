@@ -13,13 +13,13 @@ class AuthController
             $user = $_SESSION['user'];
 
             if ($user['status'] === 0) {
-                header('Location: /clinic/admin'); // Админ
+                header('Location: /clinic/admin/admin'); // Админ
                 exit();
             } elseif ($user['status'] === 1) {
-                header('Location: /clinic/vet-clinic'); // Клиника
+                header('Location: /clinic/admin/vet-clinic'); // Клиника
                 exit();
             } else {
-                header('Location: /clinic/vet'); // Врач
+                header('Location: /clinic/admin/vet'); // Врач
                 exit();
             }
         }
@@ -35,13 +35,13 @@ class AuthController
         if ($user) {
             // Проверяем статус и перенаправляем на нужный URL
             if ($user['status'] === 0) {
-                header('Location: /clinic/admin'); // Админ
+                header('Location: /clinic/admin/admin'); // Админ
                 exit();
             } elseif ($user['status'] === 1) {
-                header('Location: /clinic/vet-clinic'); // Клиника
+                header('Location: /clinic/admin/vet-clinic'); // Клиника
                 exit();
             } else {
-                header('Location: /clinic/vet');  // Врач
+                header('Location: /clinic/admin/vet');  // Врач
                 exit();
             }
         }
