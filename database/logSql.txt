@@ -2459,3 +2459,9 @@ SELECT * FROM vets WHERE clinic_id IN (?,?,?,?,?)
 SELECT * FROM appointments WHERE vet_id IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 SELECT * FROM pets WHERE id IN (?,?,?,?,?,?)
 SELECT * FROM pet_owners WHERE id IN (?,?,?,?,?,?)
+SELECT * FROM vets WHERE id = 2;
+SELECT * FROM appointments WHERE vet_id IN (?)
+SELECT * FROM vets WHERE id = 2;
+SELECT * FROM appointments WHERE vet_id IN (?)
+SELECT * FROM vets WHERE id = 2;
+SELECT * FROM appointments WHERE vet_id IN (?)

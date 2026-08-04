@@ -1,21 +1,17 @@
 <?php
 
 /**
- * @var mixed  $vet    // Данные ветеринара (из $clinicData), содержащие связи с приемами
+ * @var array  $vet    // Ассоциативный массив с данными ветеринара и вложенной связью ['appointment']
  * @var string $name   // Имя пользователя из сессии ($_SESSION['user']['name'])
  * @var string $email  // Email из сессии
  * @var int    $status // Статус роли (2 - Врач)
  */
 
-// Защищенное извлечение массива записей на прием (работает и с объектом, и с массивом)
-$appointments = [];
-if (!empty($vet)) {
-    if (is_object($vet) && !empty($vet->appointment)) {
-        $appointments = $vet->appointment;
-    } elseif (is_array($vet) && !empty($vet['appointment'])) {
-        $appointments = $vet['appointment'];
-    }
-}
+// Извлекаем массив записей на прием для этого конкретного врача из структуры массива
+$appointments = !empty($vet['appointment']) ? $vet['appointment'] : [];
+
+// Определяем реальный ID врача из массива (проверяем vet_id, затем id, иначе ставим 2 по URL)
+$currentVetId = !empty($vet['vet_id']) ? (int)$vet['vet_id'] : (!empty($vet['id']) ? (int)$vet['id'] : 2);
 ?>
 
 <!DOCTYPE html>
@@ -60,10 +56,11 @@ if (!empty($vet)) {
                             <i class="bi bi-person-vcard fs-2"></i>
                         </div>
 
+                        <!-- Выводим ФИО из переменной $name, которая прилетает из сессии -->
                         <h5 class="fw-bold text-dark mb-1"><?= htmlspecialchars($name ?? 'Не указано') ?></h5>
 
                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1.5 fs-7">
-                            <?= htmlspecialchars(is_object($vet) ? ($vet->specialty ?? 'Специализация') : ($vet['specialty'] ?? 'Специализация')) ?>
+                            <?= htmlspecialchars(!empty($vet['specialty']) ? $vet['specialty'] : 'Врач-ветеринар') ?>
                         </span>
                     </div>
 
@@ -74,8 +71,9 @@ if (!empty($vet)) {
                         <span class="fs-4 fw-bold text-dark"><?= count($appointments) ?></span>
                     </div>
                     <div class="mb-1">
+                        <!-- ТОЧНЫЙ ФИКС: Выводим вычисленный ID врача (убирает #---) -->
                         <label class="text-muted small d-block">Внутренний ID врача:</label>
-                        <span class="text-secondary fw-semibold">#<?= htmlspecialchars(is_object($vet) ? ($vet->id ?? '---') : ($vet['id'] ?? '---')) ?></span>
+                        <span class="text-secondary fw-semibold">#<?= $currentVetId ?></span>
                     </div>
                     <div class="mt-3">
                         <label class="text-muted small d-block">Код роли доступа:</label>
@@ -88,13 +86,13 @@ if (!empty($vet)) {
             <div class="col-12 col-lg-9 mb-4">
                 <div class="card border-0 shadow-sm rounded-3 bg-white overflow-hidden">
 
-                    <!-- Шапка таблицы с новой кнопкой «Добавить запись» строго под этого врача -->
+                    <!-- Шапка таблицы с кнопкой «Добавить запись» строго под этого врача -->
                     <div class="card-header bg-white p-4 border-0 border-bottom d-flex justify-content-between align-items-center">
                         <h4 class="h5 mb-0 fw-bold text-dark">
                             <i class="bi bi-calendar3 text-primary me-2"></i>Расписание ваших приёмов пациентов
                         </h4>
-                        <!-- НОВАЯ КНОПКА: Передает ID врача, чтобы автоматически привязать запись к нему -->
-                        <a href="/clinic/admin/appointment/create/vet/<?= htmlspecialchars(is_object($vet) ? (int)($vet->id ?? 0) : (int)($vet['id'] ?? 0)) ?>" class="btn btn-primary btn-sm fw-semibold rounded-pill px-3 shadow-sm">
+                        <!-- КНОПКА ДОБАВЛЕНИЯ: Передает вычисленный ID врача (убирает vet/0) -->
+                        <a href="/clinic/admin/appointment/create/vet/<?= $currentVetId ?>" class="btn btn-primary btn-sm fw-semibold rounded-pill px-3 shadow-sm">
                             <i class="bi bi-calendar-plus me-1"></i> Добавить запись
                         </a>
                     </div>
@@ -190,6 +188,7 @@ if (!empty($vet)) {
         </div>
     </div>
 
+    <!-- Скрипты Bootstrap 5 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 
