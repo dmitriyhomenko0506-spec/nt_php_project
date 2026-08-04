@@ -251,6 +251,28 @@ abstract class Model
         return $stmt->fetch(PDO::FETCH_CLASS, static::class) ?: null;
     }
 
+    public static function deleteByColumn(string $column, string $value): bool
+    {
+        $instance = new static();
+        $table = $instance->table;
+
+        // Автоматически получаем список всех реальных колонок таблицы из БД
+        $db = DB::connect();
+        $stmtFields = $db->prepare("DESCRIBE `{$table}`");
+        $stmtFields->execute();
+        $allowedColumns = $stmtFields->fetchAll(PDO::FETCH_COLUMN);
+
+        // Проверяем, существует ли переданная колонка в таблице
+        if (!in_array($column, $allowedColumns, true)) {
+            throw new \Exception("Колонка '{$column}' не существует в таблице '{$table}'.");
+        }
+
+        // Выполняем безопасное удаление
+        $sql = "DELETE FROM `{$table}` WHERE `{$column}` = :value";
+        $stmt = $db->prepare($sql);
+
+        return $stmt->execute([':value' => $value]);
+    }
 
     // create — static метод записи новых значений в БД
     public static function create(array $data): bool
@@ -267,6 +289,29 @@ abstract class Model
         $sql = "INSERT INTO {$instance->table} ({$columns}) VALUES ({$placeholdersStr});";
 
         $stmt = DB::connect()->prepare($sql);
+        return $stmt->execute($data);
+    }
+
+    public static function update(array $data, int $id): bool
+    {
+        $instance = new static();
+
+        // Формируем динамическую строку "column1 = :column1, column2 = :column2"
+        $fields = [];
+        foreach ($data as $key => $val) {
+            $fields[] = "{$key} = :{$key}";
+        }
+        $fieldsStr = implode(', ', $fields);
+
+        // Составляем универсальный SQL-запрос UPDATE
+        $sql = "UPDATE {$instance->table} SET {$fieldsStr} WHERE id = :update_id;";
+
+        // Подключаемся к БД через ваш коннектор
+        $stmt = DB::connect()->prepare($sql);
+
+        // Добавляем ID для условия WHERE в массив параметров для execute
+        $data['update_id'] = $id;
+
         return $stmt->execute($data);
     }
 }

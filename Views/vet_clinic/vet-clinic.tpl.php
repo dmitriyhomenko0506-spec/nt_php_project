@@ -1,0 +1,262 @@
+<?php
+
+/**
+ * @var object $clinic // Объект текущей клиники (из $clinicData) со всей цепочкой связей
+ * @var string $name   // Имя вошедшего пользователя из сессии
+ * @var string $email  // Email вошедшего пользователя из сессии
+ * @var int    $status // Статус роли (1 - Администратор клиники)
+ */
+
+// Извлекаем массив врачей, привязанных к этой клинике через связь 'vet'
+$doctors = !empty($clinic->vet) ? $clinic->vet : [];
+?>
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление филиалом - <?= htmlspecialchars($clinic->name ?? 'Филиал') ?></title>
+    <!-- Подключаем Bootstrap 5 и иконки Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://unpkg.com/htmlincludejs"></script>
+</head>
+
+<body class="bg-light">
+
+    <!-- Верхняя навигация -->
+    <nav class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1 d-flex align-items-center gap-2">
+                <i class="bi bi-hospital-fill text-primary"></i> Панель управления филиалом
+            </span>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white-50 small d-none d-sm-inline">
+                    <i class="bi bi-person-circle me-1"></i><?= htmlspecialchars($email) ?>
+                </span>
+                <a href="/clinic/logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-box-arrow-right me-1"></i> Выйти
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+
+        <!-- Информационная шапка текущей клиники -->
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden mb-4">
+            <div class="card-body p-4 bg-secondary bg-gradient text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-dark text-uppercase px-3 py-2 mb-2 rounded-pill"><?= htmlspecialchars($clinic->city ?? 'Город') ?></span>
+                    <h1 class="h3 mb-1 fw-bold"><?= htmlspecialchars($clinic->name ?? 'Название клиники') ?></h1>
+                    <p class="text-white-50 small mb-0">Системный ID филиала: #<?= htmlspecialchars($clinic->id ?? '') ?></p>
+                </div>
+                <div>
+                    <!-- Ссылка на GET-роут создания врача с ID клиники в URL -->
+                    <a href="/clinic/admin/doctor/create/clinic/<?= (int)$clinic->id ?>" class="btn btn-light btn-sm fw-semibold rounded-pill px-3 shadow-sm">
+                        <i class="bi bi-plus-lg me-1"></i> Добавить врача
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Левая колонка: Профиль текущего администратора -->
+            <div class="col-12 col-lg-3 mb-4">
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
+                    <h5 class="text-secondary fw-bold small text-uppercase tracking-wider mb-3">Ваш аккаунт</h5>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Администратор:</label>
+                        <span class="fw-bold text-dark"><?= htmlspecialchars($name) ?></span>
+                        <span class="text-muted small d-block"><?= htmlspecialchars($email) ?></span>
+                    </div>
+                    <hr class="text-muted">
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Медицинский персонал:</label>
+                        <span class="fs-4 fw-bold text-dark"><?= count($doctors) ?> чел.</span>
+                    </div>
+                    <div class="mt-3">
+                        <label class="text-muted small d-block">Уровень доступа:</label>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Роль #<?= htmlspecialchars($status) ?></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка: Реестр врачей этого филиала -->
+            <div class="col-12 col-lg-9 mb-4">
+                <div class="card border-0 shadow-sm rounded-3 bg-white overflow-hidden">
+                    <div class="card-header bg-white p-4 border-0 border-bottom">
+                        <h4 class="h5 mb-0 fw-bold text-dark">
+                            <i class="bi bi-people-fill text-secondary me-2"></i>Зарегистрированные врачи филиала
+                        </h4>
+                    </div>
+
+                    <?php if (!empty($doctors)): ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light text-secondary small text-uppercase border-bottom">
+                                    <tr>
+                                        <th class="ps-4" style="width: 10%">ID</th>
+                                        <th style="width: 50%">ФИО Специалиста</th>
+                                        <th style="width: 25%">Специализация</th>
+                                        <th class="text-end pe-4" style="width: 15%">Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($doctors as $doctor): ?>
+                                        <tr>
+                                            <td class="ps-4 fw-semibold text-muted">#<?= $doctor->id ?></td>
+                                            <td>
+                                                <div class="fw-bold text-dark"><?= htmlspecialchars($doctor->name) ?></div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border border-secondary-subtle px-2.5 py-1.5 rounded">
+                                                    <?= htmlspecialchars($doctor->specialty) ?>
+                                                </span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <!-- Ссылки на роуты редактирования и удаления из VetClinicController -->
+                                                    <a href="/clinic/admin/doctor/edit/<?= (int)$doctor->id ?>" class="btn btn-outline-warning btn-sm rounded-pill px-3 fw-medium">✏️</a>
+                                                    <a href="/clinic/admin/doctor/delete/<?= (int)$doctor->id ?>" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-medium" onclick="return confirm('Вы уверены, что хотите удалить этого сотрудника?');">❌</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <div class="card-body text-center p-5">
+                            <div class="text-muted mb-3 fs-1"><i class="bi bi-person-x"></i></div>
+                            <h5 class="text-secondary fw-semibold">В этом филиале пока нет зарегистрированных врачей</h5>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+        </div> <!-- СКВОЗНОЙ ЖУРНАЛ ЗАПИСЕЙ ПО ВСЕМ ВРАЧАМ КЛИНИКИ -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+
+                    <!-- Шапка таблицы с кнопкой добавления записи -->
+                    <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center border-bottom">
+                        <h5 class="mb-0 fw-bold text-dark">
+                            <i class="bi bi-calendar-check text-primary me-2"></i>Общий журнал записей на прием филиала
+                        </h5>
+                        <!-- НОВАЯ КНОПКА: Сформирована по логике ваших ЧПУ-маршрутов с ID клиники -->
+                        <a href="/clinic/admin/appointment/create/clinic/<?= (int)$clinic->id ?>" class="btn btn-primary btn-sm fw-semibold rounded-pill px-3 shadow-sm">
+                            <i class="bi bi-calendar-plus me-1"></i> Добавить запись
+                        </a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-uppercase fs-7 text-muted border-bottom">
+                                <tr>
+                                    <th class="ps-4" style="width: 120px;">ID Записи</th>
+                                    <th>Дата и время приёма</th>
+                                    <th>Пациент (Питомец)</th>
+                                    <th>Владелец</th>
+                                    <th>Врач (Ветеринар)</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $hasAppointments = false;
+
+                                // 1. Идем по врачам клиники
+                                if (!empty($clinic->vet)):
+                                    foreach ($clinic->vet as $vet):
+                                        // 2. Идем по записям конкретного врача
+                                        if (!empty($vet->appointment)):
+                                            foreach ($vet->appointment as $appointment):
+                                                $hasAppointments = true;
+
+                                                // Форматируем дату и время
+                                                if (!empty($appointment->scheduled_for)) {
+                                                    $dateObj = new DateTime($appointment->scheduled_for);
+                                                    $displayDate = $dateObj->format('d.m.Y');
+                                                    $displayTime = $dateObj->format('H:i');
+                                                } else {
+                                                    $displayDate = 'Не указана';
+                                                    $displayTime = '--:--';
+                                                }
+
+                                                // Извлекаем питомца из ORM связей
+                                                $petName = !empty($appointment->pet->name) ? htmlspecialchars($appointment->pet->name) : 'Без клички';
+                                                $petSpecies = !empty($appointment->pet->species) ? htmlspecialchars($appointment->pet->species) : 'Вид не указан';
+
+                                                // Точный вывод владельца из массива первого числового элемента коллекции
+                                                $ownerName = !empty($appointment->pet->owner->name) ? htmlspecialchars($appointment->pet->owner->name) : 'Не указан';
+                                                $ownerPhone = !empty($appointment->pet->owner->phone) ? htmlspecialchars($appointment->pet->owner->phone) : '';
+                                ?>
+                                                <tr>
+                                                    <td class="ps-4 fw-bold text-primary">#<?= htmlspecialchars($appointment->id) ?></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div class="bg-light p-2 rounded border d-flex flex-column align-items-center justify-content-center" style="min-width: 85px;">
+                                                                <span class="fw-bold text-dark small mb-0"><?= $displayDate ?></span>
+                                                            </div>
+                                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1.5 fw-bold">
+                                                                <i class="bi bi-clock me-1"></i><?= $displayTime ?>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="fw-bold text-dark d-flex align-items-center gap-1">
+                                                            <i class="bi bi-paw-fill text-warning"></i><?= $petName ?>
+                                                        </div>
+                                                        <div class="text-muted small ps-4"><?= $petSpecies ?></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="fw-semibold text-dark"><?= $ownerName ?></div>
+                                                        <?php if (!empty($ownerPhone)): ?>
+                                                            <div class="text-muted small"><i class="bi bi-telephone text-secondary me-1"></i><?= htmlspecialchars($ownerPhone) ?></div>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td>
+                                                        <div class="fw-bold text-dark"><?= htmlspecialchars($vet->name) ?></div>
+                                                        <div class="text-muted small"><?= htmlspecialchars($vet->specialty) ?></div>
+                                                    </td>
+                                                    <td>
+                                                        <?php if (($appointment->status ?? '') === 'confirm'): ?>
+                                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Подтверждена</span>
+                                                        <?php else: ?>
+                                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded-pill">В обработке</span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                    <?php
+                                            endforeach;
+                                        endif;
+                                    endforeach;
+                                endif;
+
+                                if (!$hasAppointments):
+                                    ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center py-5 text-muted">
+                                            <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
+                                            Записей на прием в этом филиале пока нет.
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Подключаем скрипты Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+
+</html>
