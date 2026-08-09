@@ -392,78 +392,64 @@
                                                 $ownerPhone = !empty($appointment->pet->owner[0]->phone) ? htmlspecialchars($appointment->pet->owner[0]->phone) : '';
                             ?>
                                                 <tr>
-                                                    <!-- ID самой записи на прием -->
-                                                    <td class="ps-4 fw-bold text-primary">#<?= htmlspecialchars($appointment->id) ?></td>
+                                                    <?php if (($appointment->status ?? '') === 'confirm'): ?>
+                                                        <!-- ID самой записи на прием -->
+                                                        <td class="ps-4 fw-bold text-primary">#<?= htmlspecialchars($appointment->id) ?></td>
 
-                                                    <!-- Вывод даты и времени приема -->
-                                                    <td>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <div class="bg-light p-2 rounded border d-flex flex-column align-items-center justify-content-center" style="min-width: 85px;">
-                                                                <span class="fw-bold text-dark small mb-0"><?= $displayDate ?></span>
+                                                        <!-- Вывод даты и времени приема -->
+                                                        <td>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="bg-light p-2 rounded border d-flex flex-column align-items-center justify-content-center" style="min-width: 85px;">
+                                                                    <span class="fw-bold text-dark small mb-0"><?= $displayDate ?></span>
+                                                                </div>
+                                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1.5 fw-bold">
+                                                                    <i class="bi bi-clock me-1"></i><?= $displayTime ?>
+                                                                </span>
                                                             </div>
-                                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1.5 fw-bold">
-                                                                <i class="bi bi-clock me-1"></i><?= $displayTime ?>
-                                                            </span>
-                                                        </div>
-                                                    </td>
+                                                        </td>
 
-                                                    <!-- Вывод данных о животном -->
-                                                    <td>
-                                                        <div class="fw-bold text-dark d-flex align-items-center gap-1">
-                                                            <i class="bi bi-paw-fill text-warning"></i>
-                                                            <?= $petName ?>
-                                                        </div>
-                                                        <div class="text-muted small"><?= $petSpecies ?></div>
-                                                    </td>
-
-                                                    <!-- Вывод данных о хозяине и его телефоне -->
-                                                    <td>
-                                                        <div class="fw-semibold text-dark"><?= $ownerName ?></div>
-                                                        <?php if (!empty($ownerPhone)): ?>
-                                                            <div class="text-muted small">
-                                                                <i class="bi bi-telephone text-secondary me-1"></i><?= htmlspecialchars($ownerPhone) ?>
+                                                        <!-- Вывод данных о животном -->
+                                                        <td>
+                                                            <div class="fw-bold text-dark d-flex align-items-center gap-1">
+                                                                <i class="bi bi-paw-fill text-warning"></i>
+                                                                <?= $petName ?>
                                                             </div>
-                                                        <?php endif; ?>
-                                                    </td>
+                                                            <div class="text-muted small"><?= $petSpecies ?></div>
+                                                        </td>
 
-                                                    <!-- Информация о враче -->
-                                                    <td>
-                                                        <div class="fw-bold text-dark"><?= htmlspecialchars($vet->name) ?></div>
-                                                        <div class="text-muted small"><?= htmlspecialchars($vet->specialty) ?></div>
-                                                    </td>
+                                                        <!-- Вывод данных о хозяине и его телефоне -->
+                                                        <td>
+                                                            <div class="fw-semibold text-dark"><?= $ownerName ?></div>
+                                                            <?php if (!empty($ownerPhone)): ?>
+                                                                <div class="text-muted small">
+                                                                    <i class="bi bi-telephone text-secondary me-1"></i><?= htmlspecialchars($ownerPhone) ?>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </td>
 
-                                                    <!-- Клиника и город -->
-                                                    <td>
-                                                        <div class="fw-medium text-dark">
-                                                            <i class="bi bi-hospital text-muted me-1"></i><?= htmlspecialchars($clinic->name) ?>
-                                                        </div>
-                                                        <div class="text-muted small ps-4"><?= htmlspecialchars($clinic->city) ?></div>
-                                                    </td>
+                                                        <!-- Информация о враче -->
+                                                        <td>
+                                                            <div class="fw-bold text-dark"><?= htmlspecialchars($vet->name) ?></div>
+                                                            <div class="text-muted small"><?= htmlspecialchars($vet->specialty) ?></div>
+                                                        </td>
 
-                                                    <!-- Статус записи из ORM -->
-                                                    <td>
-                                                        <?php if (($appointment->status ?? '') === 'confirm'): ?>
-                                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">
-                                                                Подтверждена
-                                                            </span>
-                                                        <?php else: ?>
-                                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2.5 py-1">
-                                                                <?= htmlspecialchars($appointment->status ?? 'Новая') ?>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </td>
+                                                        <!-- Клиника и город -->
+                                                        <td>
+                                                            <div class="fw-medium text-dark">
+                                                                <i class="bi bi-hospital text-muted me-1"></i><?= htmlspecialchars($clinic->name) ?>
+                                                            </div>
+                                                            <div class="text-muted small ps-4"><?= htmlspecialchars($clinic->city) ?></div>
+                                                        </td>
 
-                                                    <!-- Кнопки быстрых действий -->
-                                                    <td class="text-end pe-4">
-                                                        <div class="btn-group">
-                                                            <button class="btn btn-sm btn-outline-secondary border-0 text-primary bg-transparent" title="Посмотреть подробности">
-                                                                <i class="bi bi-eye fs-5"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm btn-outline-secondary border-0 text-danger bg-transparent" title="Отменить запись">
-                                                                <i class="bi bi-calendar-x fs-5"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
+                                                        <!-- Статус записи из ORM -->
+                                                        <td>
+                                                            <?php if (($appointment->status ?? '') === 'confirm'): ?>
+                                                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">
+                                                                    Подтверждена
+                                                                </span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    <?php endif; ?>
                                                 </tr>
                                 <?php
                                             endforeach;

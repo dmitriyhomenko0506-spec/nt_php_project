@@ -33,7 +33,7 @@ Route::get('/clinic/contact', [ContactController::class, 'contactPage']);
 //Web // login admin
 Route::get('/clinic/login', [AuthController::class, 'index'], AuthMiddleware::class);
 Route::post('/clinic/login', [AuthController::class, 'submit'], AuthMiddleware::class);
-Route::get('/clinic/logout', [AuthController::class, 'logout'], AuthMiddleware::class);
+Route::get('/clinic/logout', [AuthController::class, 'logout'], CheckAuthMiddleware::class);
 
 //web // admin / clinic
 Route::get('/clinic/admin/vet-clinic/{id}', [VetClinicController::class, 'vetClinic'], ClinicMiddleware::class);
@@ -42,13 +42,17 @@ Route::post('/clinic/admin/doctor/update', [VetClinicController::class, 'updateD
 Route::get('/clinic/admin/doctor/delete/{id}', [VetClinicController::class, 'deleteDoctor'], ClinicMiddleware::class);
 Route::get('/clinic/admin/doctor/create/clinic/{id}', [VetClinicController::class, 'createDoctorPage'], ClinicMiddleware::class);
 Route::post('/clinic/admin/doctor/create/clinic/{id}', [VetClinicController::class, 'createDoctor']);
-///Route::get('/clinic/admin/appointment/create/clinic/{id}');
-
+Route::get('/clinic/admin/appointment/create/clinic/{id}', [VetClinicController::class, 'createAppointmentPage'], ClinicMiddleware::class);
+Route::post('/clinic/admin/appointment/create/clinic/{id}', [VetClinicController::class, 'createAppointment']);
+Route::get('/clinic/admin/appointment/delete/{id}', [VetClinicController::class, 'deleteAppointment'], ClinicMiddleware::class);
+Route::get('/clinic/admin/appointment/confirm/{id}', [VetClinicController::class, 'confirmAppointment'], ClinicMiddleware::class);
 
 //web // admin / doctor
 Route::get('/clinic/admin/vet/{id}', [VetController::class, 'vet'], DoctorMiddleware::class);
-///Route::get('/clinic/admin/appointment/create/vet/{id}');
-
+Route::get('/clinic/admin/vet/appointment/create/clinic/{id}', [VetController::class, 'createAppointmentPage'], DoctorMiddleware::class);
+Route::post('/clinic/admin/vet/appointment/create/clinic/{id}', [VetController::class, 'createAppointment']);
+Route::get('/clinic/admin/vet/appointment/delete/{id}', [VetController::class, 'deleteAppointment'], DoctorMiddleware::class);
+Route::get('/clinic/admin/vet/appointment/confirm/{id}', [VetController::class, 'confirmAppointment'], DoctorMiddleware::class);
 
 //web //admin/admin
 Route::get('/clinic/admin/admin', [AdminController::class, 'admin'], AdminMiddleware::class);

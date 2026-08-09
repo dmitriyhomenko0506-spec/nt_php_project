@@ -46,6 +46,104 @@ class VetClinicController
         ]);
     }
 
+    public function createAppointmentPage(int $id): void
+    {
+        $clinicsData = Clinic::with('vet.appointment')
+            ->where("id = {$id}")
+            ->getModels();
+
+        //dd($clinicsData);
+
+        View::render('vet_clinic/create_appointment', [
+            'clinics' => $clinicsData,
+            'clinic_id' => $id
+        ]);
+    }
+
+    public function createAppointment(int $id): void
+    {
+        if (empty($_POST)) {
+            header('Location: /clinic/admin/vet-clinic/' . $id . '?error=1');
+            exit;
+        }
+        //dd($_POST);
+
+        if (isset($_POST['ownerName']) && ($_POST['ownerPhone'])) {
+            $dataOwner = [
+                'name' => $_POST['ownerName'],
+                'phone' => trim((int)$_POST['ownerPhone'])
+            ];
+
+            $Usser =  Pet_owners::findBy('phone', $_POST['ownerPhone']);
+
+            if (!empty($Usser)) {
+                $createOwner = true;
+            } else {
+                $createOwner = Pet_owners::create($dataOwner);
+            }
+
+            if ($createOwner === true) {
+                $OwnerID =  Pet_owners::where("name = '{$_POST['ownerName']}' ORDER BY id DESC LIMIT 1")->get();
+
+                $dataPet = [
+                    'owner_id' => (int)$OwnerID[0]['id'],
+                    'name' => $_POST['petName'],
+                    'species' => $_POST['petType']
+                ];
+
+                /*$UsserPet =  Pet::findBy('name', $_POST['petName']);
+                if (!empty($UsserPet)) {
+                    $createPet  = true;
+                } else {
+                    $createPet = Pet::create($dataPet);
+                }*/
+
+                $createPet = Pet::create($dataPet);
+                if ($createPet === true) {
+                    $PetID =  Pet::where("name = '{$_POST['petName']}' ORDER BY id DESC LIMIT 1")->get();
+
+                    $dataAppointments = [
+                        'clinic_id' => (int)$_POST['clinic_id'],
+                        'vet_id' => (int)$_POST['vet_id'],
+                        'pet_id' => $PetID[0]['id'],
+                        'scheduled_for' => $_POST['visitDate'] . ' ' . $_POST['visitTime'],
+                        'status' => 'confirm'
+                    ];
+
+                    $createAppointments = Appointments::create($dataAppointments);
+                    if ($createAppointments === true) {
+                        header('Location: /clinic/admin/vet-clinic/' . $id);
+                        exit;
+                    }
+                }
+            }
+        }
+    }
+
+
+    public function deleteAppointment(int $id): void
+    {
+        $result = Appointments::findBy('id', $id);
+        if (!empty($result)) {
+            Appointments::deleteByColumn('id', $id);
+            header('Location: /clinic/admin/vet-clinic/' . $_SESSION['user']['clinic_id']);
+            exit;
+        }
+    }
+
+    public function confirmAppointment(int $id): void
+    {
+
+        $result = Appointments::findBy('id', $id);
+        if (!empty($result)) {
+            $dataApp = [
+                'status' => 'close'
+            ];
+            Appointments::update($dataApp, $id);
+            header('Location: /clinic/admin/vet-clinic/' . $_SESSION['user']['clinic_id']);
+            exit;
+        }
+    }
 
     public function createDoctor(int $id): void
     {

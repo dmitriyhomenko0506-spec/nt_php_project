@@ -3,3 +3,4 @@ Config/ConfigConnectDB.php
 sandbox.php
 prom_links.php
 prom_send.php
+database/logSql.txt
