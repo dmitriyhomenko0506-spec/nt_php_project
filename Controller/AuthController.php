@@ -8,18 +8,18 @@ class AuthController
 {
     public function index()
     {
-        // Если пользователь УЖЕ авторизован, контроллер сам решает, куда его отправить
         if (!empty($_SESSION['user'])) {
             $user = $_SESSION['user'];
+            $id = $_SESSION['user']['clinic_id'];
 
             if ($user['status'] === 0) {
                 header('Location: /clinic/admin/admin'); // Админ
                 exit();
             } elseif ($user['status'] === 1) {
-                header('Location: /clinic/admin/vet-clinic'); // Клиника
+                header('Location: /clinic/admin/vet-clinic/' . $id); // Клиника
                 exit();
             } else {
-                header('Location: /clinic/admin/vet'); // Врач
+                header('Location: /clinic/admin/vet/' . $id); // Врач
                 exit();
             }
         }
@@ -27,38 +27,59 @@ class AuthController
         return View::render('admin/login');
     }
 
+
+
     public function submit(): void
     {
+        if (!empty($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+            $id = $_SESSION['user']['clinic_id'];
 
-        $user = $_SESSION['user'] ?? null;
-
-        if ($user) {
-            // Проверяем статус и перенаправляем на нужный URL
             if ($user['status'] === 0) {
                 header('Location: /clinic/admin/admin'); // Админ
                 exit();
             } elseif ($user['status'] === 1) {
-                header('Location: /clinic/admin/vet-clinic'); // Клиника
+                header('Location: /clinic/admin/vet-clinic/' . $id); // Клиника
                 exit();
             } else {
-                header('Location: /clinic/admin/vet');  // Врач
+                header('Location: /clinic/admin/vet/' . $id); // Врач
                 exit();
             }
         }
+
+        header('Location: /clinic/login');
+        exit();
     }
 
     public function logout(): void
     {
-        // Очищаем все переменные сессии в памяти PHP
-        $_SESSION = [];
-
-        // Уничтожаем саму сессию на сервере
-        if (session_id() !== '') {
-            session_destroy();
+        // 1. Обязательно запускаем сессию, чтобы PHP понял, какую именно сессию закрывать
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
 
-        // Перенаправляем пользователя обратно на страницу входа
+        // 2. Полностью очищаем массив $_SESSION (стираем данные пользователя)
+        $_SESSION = [];
+
+        // 3. Удаляем сессионные куки в браузере клиента (чтобы сессия не восстановилась)
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+
+        // 4. Уничтожаем файл сессии на самом сервере
+        session_destroy();
+
+        // 5. Перенаправляем пользователя на главную или на страницу входа
         header('Location: /clinic/login');
-        exit();
+        exit;
     }
 }
