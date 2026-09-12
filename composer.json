@@ -5,6 +5,7 @@
             "App\\Controller\\": "Controller/",
             "App\\Route\\": "Route/",
             "App\\Middleware\\": "Middleware/",
+            "App\\Validator\\": "Validator/",
             "App\\Views\\": "Views/",
             "App\\Config\\": "Config/",
             "App\\": "src/"
