@@ -9,7 +9,7 @@ return new class {
                 id smallint UNSIGNED PRIMARY KEY AUTO_INCREMENT,
                 email VARCHAR(50) UNIQUE NOT NULL,
                 pass VARCHAR(255) NOT NULL,
-                clinic_id smallint NOT NULL,
+                clinic_id VARCHAR(255) NOT NULL,
                 name VARCHAR(50) NOT NULL,
                 status smallint NOT NULL
                 );';

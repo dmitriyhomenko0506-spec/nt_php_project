@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 try {
 
+
     // Подключаем Router для WEB
     require_once BASE_DIR . '/Route/web/RouteListWeb.php';
     // Подключаем Router для API

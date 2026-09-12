@@ -17,7 +17,7 @@ class AuthValidator
         // Извлекаем массив пользователя из индекса 0
         $user = !empty($result[0]) ? $result[0] : null;
 
-        //dd($user['pass']);
+        //dd($user);
 
         // Сверяем пароли. 
         if ($user && isset($user['pass']) && password_verify($pass, trim($user['pass']))) {
