@@ -8,7 +8,7 @@ return new class {
         return 'CREATE TABLE if not exists vets (
                 id smallint UNSIGNED PRIMARY KEY AUTO_INCREMENT,
                 clinic_id smallint UNSIGNED NOT NULL,
-                name VARCHAR(50) NOT NULL,
+                name VARCHAR(50)  UNIQUE NOT NULL,
                 specialty VARCHAR(255) NOT NULL,
                 FOREIGN KEY (clinic_id) REFERENCES clinics(id)
                 );';
