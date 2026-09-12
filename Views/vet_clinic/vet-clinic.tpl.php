@@ -136,16 +136,18 @@ $doctors = !empty($clinic->vet) ? $clinic->vet : [];
 
                 </div>
             </div>
-        </div> <!-- СКВОЗНОЙ ЖУРНАЛ ЗАПИСЕЙ ПО ВСЕМ ВРАЧАМ КЛИНИКИ -->
+        </div>
+
+
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
 
-                    <!-- Шапка таблицы с кнопкой добавления записи -->
                     <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center border-bottom">
                         <h5 class="mb-0 fw-bold text-dark">
-                            <i class="bi bi-calendar-check text-primary me-2"></i>Общий журнал записей на прием филиала
+                            <i class="bi bi-calendar-check text-primary me-2"></i>Журнал записей на прием филиала
                         </h5>
+
                         <!-- НОВАЯ КНОПКА: Сформирована по логике ваших ЧПУ-маршрутов с ID клиники -->
                         <a href="/clinic/admin/appointment/create/clinic/<?= (int)$clinic->id ?>" class="btn btn-primary btn-sm fw-semibold rounded-pill px-3 shadow-sm">
                             <i class="bi bi-calendar-plus me-1"></i> Добавить запись
@@ -168,15 +170,15 @@ $doctors = !empty($clinic->vet) ? $clinic->vet : [];
                                 <?php
                                 $hasAppointments = false;
 
-                                // 1. Идем по врачам клиники
                                 if (!empty($clinic->vet)):
                                     foreach ($clinic->vet as $vet):
-                                        // 2. Идем по записям конкретного врача
                                         if (!empty($vet->appointment)):
                                             foreach ($vet->appointment as $appointment):
-                                                $hasAppointments = true;
 
-                                                // Форматируем дату и время
+                                                if (($appointment->status ?? '') === 'confirm') {
+                                                    $hasAppointments = true;
+                                                }
+
                                                 if (!empty($appointment->scheduled_for)) {
                                                     $dateObj = new DateTime($appointment->scheduled_for);
                                                     $displayDate = $dateObj->format('d.m.Y');
@@ -186,49 +188,53 @@ $doctors = !empty($clinic->vet) ? $clinic->vet : [];
                                                     $displayTime = '--:--';
                                                 }
 
-                                                // Извлекаем питомца из ORM связей
                                                 $petName = !empty($appointment->pet->name) ? htmlspecialchars($appointment->pet->name) : 'Без клички';
                                                 $petSpecies = !empty($appointment->pet->species) ? htmlspecialchars($appointment->pet->species) : 'Вид не указан';
 
-                                                // Точный вывод владельца из массива первого числового элемента коллекции
-                                                $ownerName = !empty($appointment->pet->owner->name) ? htmlspecialchars($appointment->pet->owner->name) : 'Не указан';
-                                                $ownerPhone = !empty($appointment->pet->owner->phone) ? htmlspecialchars($appointment->pet->owner->phone) : '';
+                                                // ТОЧНЫЙ ФИКС С УЧЕТОМ СТРУКТУРЫ ВАШЕЙ СВЯЗИ [0]
+                                                $ownerName = !empty($appointment->pet->owner[0]->name) ? htmlspecialchars($appointment->pet->owner[0]->name) : 'Не указан';
+                                                $ownerPhone = !empty($appointment->pet->owner[0]->phone) ? htmlspecialchars($appointment->pet->owner[0]->phone) : '';
+
+
                                 ?>
                                                 <tr>
-                                                    <td class="ps-4 fw-bold text-primary">#<?= htmlspecialchars($appointment->id) ?></td>
-                                                    <td>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <div class="bg-light p-2 rounded border d-flex flex-column align-items-center justify-content-center" style="min-width: 85px;">
-                                                                <span class="fw-bold text-dark small mb-0"><?= $displayDate ?></span>
+                                                    <?php if (($appointment->status ?? '') === 'confirm'): ?>
+                                                        <td class="ps-4 fw-bold text-primary">#<?= htmlspecialchars($appointment->id) ?></td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="bg-light p-2 rounded border d-flex flex-column align-items-center justify-content-center" style="min-width: 85px;">
+                                                                    <span class="fw-bold text-dark small mb-0"><?= $displayDate ?></span>
+                                                                </div>
+                                                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1.5 fw-bold">
+                                                                    <i class="bi bi-clock me-1"></i><?= $displayTime ?>
+                                                                </span>
                                                             </div>
-                                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1.5 fw-bold">
-                                                                <i class="bi bi-clock me-1"></i><?= $displayTime ?>
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="fw-bold text-dark d-flex align-items-center gap-1">
-                                                            <i class="bi bi-paw-fill text-warning"></i><?= $petName ?>
-                                                        </div>
-                                                        <div class="text-muted small ps-4"><?= $petSpecies ?></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="fw-semibold text-dark"><?= $ownerName ?></div>
-                                                        <?php if (!empty($ownerPhone)): ?>
-                                                            <div class="text-muted small"><i class="bi bi-telephone text-secondary me-1"></i><?= htmlspecialchars($ownerPhone) ?></div>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td>
-                                                        <div class="fw-bold text-dark"><?= htmlspecialchars($vet->name) ?></div>
-                                                        <div class="text-muted small"><?= htmlspecialchars($vet->specialty) ?></div>
-                                                    </td>
-                                                    <td>
-                                                        <?php if (($appointment->status ?? '') === 'confirm'): ?>
+                                                        </td>
+                                                        <td>
+                                                            <div class="fw-bold text-dark d-flex align-items-center gap-1">
+                                                                <i class="bi bi-paw-fill text-warning"></i><?= $petName ?>
+                                                            </div>
+                                                            <div class="text-muted small"><?= $petSpecies ?></div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="fw-semibold text-dark"><?= $ownerName ?></div>
+                                                            <?php if (!empty($ownerPhone)): ?>
+                                                                <div class="text-muted small"><i class="bi bi-telephone text-secondary me-1"></i><?= htmlspecialchars($ownerPhone) ?></div>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td>
+                                                            <div class="fw-bold text-dark"><?= htmlspecialchars($vet->name) ?></div>
+                                                            <div class="text-muted small"><?= htmlspecialchars($vet->specialty) ?></div>
+                                                        </td>
+                                                        <td>
+
                                                             <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded-pill">Подтверждена</span>
-                                                        <?php else: ?>
-                                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded-pill">В обработке</span>
-                                                        <?php endif; ?>
-                                                    </td>
+                                                            <a href="/clinic/admin/appointment/confirm/<?= (int)$appointment->id ?>" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-medium">✅</a>
+                                                            <a href="/clinic/admin/appointment/delete/<?= (int)$appointment->id ?>" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-medium" onclick="return confirm('Вы уверены, что хотите удалить этого сотрудника?');">❌</a>
+
+
+                                                        </td>
+                                                    <?php endif; ?>
                                                 </tr>
                                     <?php
                                             endforeach;
@@ -239,10 +245,7 @@ $doctors = !empty($clinic->vet) ? $clinic->vet : [];
                                 if (!$hasAppointments):
                                     ?>
                                     <tr>
-                                        <td colspan="6" class="text-center py-5 text-muted">
-                                            <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
-                                            Записей на прием в этом филиале пока нет.
-                                        </td>
+                                        <td colspan="6" class="text-center py-5 text-muted">Записей на прием в этом филиале пока нет.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
